@@ -64,6 +64,7 @@ namespace LoveKicher.ElectricRail.CoolQ
 
         internal void OnStartup()
         {
+            PluginContext.Current.TryLoadModules();
             Startup?.Invoke(this, new EventArgs());
         }
 

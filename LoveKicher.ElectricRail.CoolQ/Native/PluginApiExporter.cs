@@ -34,7 +34,7 @@ namespace LoveKicher.ElectricRail.CoolQ.Native
         public static int Initialize(int authcode)
         {
             PluginContext.Current.CurrentPlugin?.OnInitialize(authcode);
-            Debug.Print("Initialize方法已返回");
+            Debug.Print("Initialize方法已返回"+authcode);
             return 0;
         }
 

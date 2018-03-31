@@ -30,7 +30,7 @@
       "name": "讨论组消息处理",
       "function": "_eventDiscussMsg",
       "priority": 30000
-    }/*,
+    } /*,
     {
       "id": 4,
       "type": 11,
@@ -79,7 +79,7 @@
       "name": "群添加请求处理",
       "function": "_eventRequest_AddGroup",
       "priority": 30000
-    },
+    }*/,
     {
       "id": 1001,
       "type": 1001,
@@ -107,7 +107,7 @@
       "name": "应用将被停用",
       "priority": 30000,
       "function": "_eventDisable"
-    }*/
+    }
   ],
   "menu": [ // 设置菜单（发布前请删除无用菜单，如果无需设置菜单请全部删除）
     /*{

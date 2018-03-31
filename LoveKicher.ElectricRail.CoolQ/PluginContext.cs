@@ -24,7 +24,7 @@ namespace LoveKicher.ElectricRail.CoolQ
 
             _plugin = new CoolQPlugin();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            TryLoadModules();
+            
         }
 
         /// <summary>
@@ -44,9 +44,6 @@ namespace LoveKicher.ElectricRail.CoolQ
 
         private static PluginContext _ctx;
         private static CoolQPlugin _plugin;
-
-        private Timer timer = new Timer(1000) { AutoReset = false };
-
 
 
 
@@ -83,28 +80,24 @@ namespace LoveKicher.ElectricRail.CoolQ
 
 
 
-        private void TryLoadModules()
+        internal void TryLoadModules()
         {
             try
             {
-                timer.Elapsed += (s, e) =>
+                var dir = Api.GetAppDirectory();
+                if (Directory.Exists(dir))
                 {
-                    var dir = Api.GetAppDirectory();
-                    if (Directory.Exists(dir))
+                    ComposeModules(dir);
+                    Api.AddLog(CoolQLogLevel.Info, "模块加载", $"共加载{Modules.Count()}个模块");
+                }
+                else
+                {
+                    if (dir != null)
                     {
-                        ComposeModules(dir);
-                        Api.AddLog(CoolQLogLevel.Info, "模块加载", $"共加载{Modules.Count()}个模块");
+                        Directory.CreateDirectory(dir);
                     }
-                    else
-                    {
-                        if (dir != null)
-                        {
-                            Directory.CreateDirectory(dir);
-                        }
 
-                    }
-                };
-                timer.Enabled = true;
+                }
 
             }
             catch (Exception e)
