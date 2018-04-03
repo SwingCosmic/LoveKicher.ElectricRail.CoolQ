@@ -1,5 +1,6 @@
 ﻿
 using LoveKicher.ElectricRail.CoolQ.Constants;
+using LoveKicher.ElectricRail.CoolQ.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -20,25 +22,47 @@ namespace LoveKicher.ElectricRail.CoolQ
     {
 
         internal PluginContext()
-        {           
-
+        {
+            Logger = LoggerFactory.CreateLogger("file");
             _plugin = new CoolQPlugin();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             
         }
 
         /// <summary>
-        /// 找不到核心程序集时，直接返回对本身的引用
+        /// 重定向对依赖程序集的引用
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         /// <returns></returns>
+        [HandleProcessCorruptedStateExceptions]
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             if (args.Name.StartsWith("LoveKicher.ElectricRail.CoolQ"))
             {
+                Log(LogLevel.Info, $"已重定向框架程序集[{args.Name}]");
                 return Assembly.GetExecutingAssembly();
             }
+            else
+            {
+                try
+                {
+                    var files = Directory.GetFiles(Api.GetAppDirectory(), "*.dll");
+                    var result = files.Where(f => args.Name.StartsWith(
+                        Path.GetFileNameWithoutExtension(f))).ToArray();
+                    if (result.Length > 0)
+                    {
+                        Log(LogLevel.Info, $"已重定向程序集[{args.Name}]到[{result[0]}]");
+                        return Assembly.LoadFrom(result[0]);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log(LogLevel.Error, $"加载程序集[{args.Name}]发生错误：\n{e}");
+                    return null;
+                }
+            }
+            Log(LogLevel.Error, $"无法找到程序集[{args.Name}]！");
             return null;
         }
 
@@ -70,6 +94,9 @@ namespace LoveKicher.ElectricRail.CoolQ
         /// <summary>获取当前加载插件的酷Q API实例。</summary>
         public static ICoolQApi Api { get; } = new CoolQApi();
 
+        /// <summary>获取日志记录器的实例</summary>
+        public Logger Logger { get; }
+
         /// <summary>
         /// 获取当前加载插件所有<see cref="ICoolQModule"/>的集合
         /// </summary>
@@ -85,26 +112,32 @@ namespace LoveKicher.ElectricRail.CoolQ
             try
             {
                 var dir = Api.GetAppDirectory();
-                if (Directory.Exists(dir))
-                {
+
+                if (Directory.Exists(dir) 
+                    && Directory.EnumerateFiles(dir, "*.dll").Count() > 0)
                     ComposeModules(dir);
-                    Api.AddLog(CoolQLogLevel.Info, "模块加载", $"共加载{Modules.Count()}个模块");
-                }
                 else
+                    ComposeModules();
+
+                Api.AddLog(CoolQLogLevel.Info, "模块加载", $"共加载{Modules.Count()}个模块");
+
+                foreach (var m in Modules)
                 {
-                    if (dir != null)
-                    {
-                        Directory.CreateDirectory(dir);
-                    }
-
+                    Log(LogLevel.Info, $"已加载模块：[{m.ModuleName},版本{m.Version}]");
                 }
-
             }
             catch (Exception e)
             {
-                Api.AddLog(CoolQLogLevel.Warning, "警告", "加载模块失败！" + e);
+                Log(LogLevel.Warning, "加载模块失败！" + e);
             }
 
+        }
+
+        private void ComposeModules()
+        {
+            var catalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
+            var container = new CompositionContainer(catalog);
+            container.ComposeParts(this);
         }
 
         private void ComposeModules(string dir)
@@ -112,6 +145,11 @@ namespace LoveKicher.ElectricRail.CoolQ
             var catalog = new DirectoryCatalog(dir);
             var container = new CompositionContainer(catalog);
             container.ComposeParts(this);
+        }
+        
+        public bool Log(LogLevel level, string content)
+        {
+            return Logger.AddLog(level, content, nameof(PluginContext));
         }
     }
 }

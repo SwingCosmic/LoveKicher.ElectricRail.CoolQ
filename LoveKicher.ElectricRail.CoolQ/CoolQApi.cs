@@ -14,15 +14,8 @@ namespace LoveKicher.ElectricRail.CoolQ
     internal class CoolQApi : MarshalByRefObject, ICoolQApi
     {
 
-        int AuthCode
-        {
-            get
-            {
-                var c = PluginContext.Current.ApiAuthCode;
-                Debug.Print($"{DateTime.Now} : 尝试访问AuthCode = {c}");
-                return c;
-            }
-        }
+        int AuthCode => PluginContext.Current.ApiAuthCode;
+        
         public int AddLog(CoolQLogLevel 优先级, string 类型, string 内容)
         {
             return NativeMethods.CQ_addLog(AuthCode, (int)优先级, 类型, 内容);

@@ -73,6 +73,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -92,8 +93,17 @@
     <Compile Include="Events\GroupMessageReceivedEventArgs.cs" />
     <Compile Include="Events\PluginEventArgs.cs" />
     <Compile Include="Events\InitializeEventArgs.cs" />
+    <Compile Include="Extensions\ApiExtensions.cs" />
+    <Compile Include="Extensions\PackingHelper.cs" />
+    <Compile Include="Extensions\Unpack.cs" />
     <Compile Include="ICoolQApi.cs" />
     <Compile Include="ICoolQModule.cs" />
+    <Compile Include="Logging\Providers\ConsoleLogProvider.cs" />
+    <Compile Include="Logging\ILogProvider.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggerFactory.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\Providers\FileLogProvider.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\PluginApiExporter.cs" />
     <Compile Include="Events\PrivateMessageReceivedEventArgs.cs" />
@@ -106,6 +116,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)packages\DllExport.1.6.0\tools\net.r_eg.DllExport.targets" Condition="Exists('$(SolutionDir)packages\DllExport.1.6.0\tools\net.r_eg.DllExport.targets')" Label="8337224c9ad9e356" />
   <Target Name="DllExportRestorePkg" BeforeTargets="PrepareForBuild">
