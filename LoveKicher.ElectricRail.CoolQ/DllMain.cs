@@ -26,7 +26,7 @@ namespace LoveKicher.ElectricRail.CoolQ
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             PluginContext.Api.AddLog(Constants.CoolQLogLevel.Error, "异常", (e.ExceptionObject as Exception).Message);
-            Logger.AddLog(LogLevel.Error, $"AppDomain[{AppDomain.CurrentDomain.FriendlyName}]遇到未处理的异常" + (e.ExceptionObject as Exception).ToString(), nameof(DllMain));
+            Logger.AddLog(LogLevel.Error, $"AppDomain[{AppDomain.CurrentDomain.FriendlyName}]遇到未处理的异常：\n" + (e.ExceptionObject as Exception).ToString(), nameof(DllMain));
         }
 
        

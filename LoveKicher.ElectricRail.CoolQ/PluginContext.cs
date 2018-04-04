@@ -1,7 +1,4 @@
-﻿
-using LoveKicher.ElectricRail.CoolQ.Constants;
-using LoveKicher.ElectricRail.CoolQ.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -12,7 +9,10 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
+
+using LoveKicher.ElectricRail.CoolQ.Constants;
+using LoveKicher.ElectricRail.CoolQ.Logging;
+
 namespace LoveKicher.ElectricRail.CoolQ
 {
     /// <summary>
@@ -24,10 +24,48 @@ namespace LoveKicher.ElectricRail.CoolQ
         internal PluginContext()
         {
             Logger = LoggerFactory.CreateLogger("file");
-            _plugin = new CoolQPlugin();
+            CurrentPlugin = new CoolQPlugin();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             
         }
+        private static PluginContext _ctx;
+
+        #region 属性
+
+        /// <summary>
+        /// 返回当前插件上下文的唯一实例
+        /// </summary>
+        public static PluginContext Current
+        {
+            get
+            {
+                if (_ctx == null)
+                    _ctx = new PluginContext();
+                return _ctx;
+            }
+        }
+        /// <summary>获取当前加载的插件实例</summary>
+        public CoolQPlugin CurrentPlugin { get; }
+        /// <summary>获取当前加载插件的酷Q API所使用的AuthCode</summary>
+        public int ApiAuthCode { get; internal set; }
+
+
+        /// <summary>获取当前加载插件的酷Q API实例。</summary>
+        public static ICoolQApi Api { get; } = new CoolQApi();
+
+        /// <summary>获取日志记录器的实例</summary>
+        public Logger Logger { get; }
+
+        /// <summary>
+        /// 获取当前加载插件所有<see cref="ICoolQModule"/>的集合
+        /// </summary>
+        [ImportMany(typeof(ICoolQModule))]
+        public IEnumerable<ICoolQModule> Modules { get; set; }
+
+
+        #endregion
+
+
 
         /// <summary>
         /// 重定向对依赖程序集的引用
@@ -47,9 +85,10 @@ namespace LoveKicher.ElectricRail.CoolQ
             {
                 try
                 {
-                    var files = Directory.GetFiles(Api.GetAppDirectory(), "*.dll");
-                    var result = files.Where(f => args.Name.StartsWith(
-                        Path.GetFileNameWithoutExtension(f))).ToArray();
+                    var files = Directory.GetFiles(Api.GetAppDirectory(), "*.dll", SearchOption.AllDirectories);
+                    var asmName = args.Name.Split(',')?[0];
+                    var result = files.Where(f => Path.GetFileNameWithoutExtension(f)
+                        .StartsWith(asmName)).ToArray();
                     if (result.Length > 0)
                     {
                         Log(LogLevel.Info, $"已重定向程序集[{args.Name}]到[{result[0]}]");
@@ -65,47 +104,6 @@ namespace LoveKicher.ElectricRail.CoolQ
             Log(LogLevel.Error, $"无法找到程序集[{args.Name}]！");
             return null;
         }
-
-        private static PluginContext _ctx;
-        private static CoolQPlugin _plugin;
-
-
-
-        #region 属性
-
-        /// <summary>
-        /// 返回当前插件上下文的唯一实例
-        /// </summary>
-        public static PluginContext Current
-        {
-            get
-            {
-                if (_ctx == null)
-                    _ctx = new PluginContext();
-                return _ctx;
-            }
-        }
-        /// <summary>获取当前加载的插件实例</summary>
-        public CoolQPlugin CurrentPlugin => _plugin;
-        /// <summary>获取当前加载插件的酷Q API所使用的AuthCode</summary>
-        public int ApiAuthCode { get; internal set; }
-
-
-        /// <summary>获取当前加载插件的酷Q API实例。</summary>
-        public static ICoolQApi Api { get; } = new CoolQApi();
-
-        /// <summary>获取日志记录器的实例</summary>
-        public Logger Logger { get; }
-
-        /// <summary>
-        /// 获取当前加载插件所有<see cref="ICoolQModule"/>的集合
-        /// </summary>
-        [ImportMany(typeof(ICoolQModule))]
-        public IEnumerable<ICoolQModule> Modules { get; set; }
-
-        #endregion
-
-
 
         internal void TryLoadModules()
         {
