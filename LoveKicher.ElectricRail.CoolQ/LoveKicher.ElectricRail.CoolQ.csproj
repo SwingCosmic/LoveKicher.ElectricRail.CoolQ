@@ -89,6 +89,7 @@
     <Compile Include="CoolQPlugin.cs" />
     <Compile Include="Events\DiscussMessageReceivedEventArgs.cs" />
     <Compile Include="DllMain.cs" />
+    <Compile Include="Events\GroupFileUploadEventArgs.cs" />
     <Compile Include="Events\MessageInterceptedException.cs" />
     <Compile Include="Events\GroupMessageReceivedEventArgs.cs" />
     <Compile Include="Events\PluginEventArgs.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Extensions\ApiExtensions.cs" />
     <Compile Include="Extensions\PackingHelper.cs" />
     <Compile Include="Extensions\Unpack.cs" />
+    <Compile Include="Extensions\UtilMethods.cs" />
     <Compile Include="ICoolQApi.cs" />
     <Compile Include="ICoolQModule.cs" />
     <Compile Include="Logging\Providers\ConsoleLogProvider.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Logging\LoggerFactory.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\Providers\FileLogProvider.cs" />
+    <Compile Include="Models\CoolQModelBase.cs" />
+    <Compile Include="Models\GroupFileInfo.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\PluginApiExporter.cs" />
     <Compile Include="Events\PrivateMessageReceivedEventArgs.cs" />

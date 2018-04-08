@@ -30,14 +30,14 @@
       "name": "讨论组消息处理",
       "function": "_eventDiscussMsg",
       "priority": 30000
-    } /*,
+    },
     {
       "id": 4,
       "type": 11,
       "name": "群文件上传事件处理",
       "function": "_eventGroupUpload",
       "priority": 30000
-    },
+    }/*,
     {
       "id": 5,
       "type": 101,

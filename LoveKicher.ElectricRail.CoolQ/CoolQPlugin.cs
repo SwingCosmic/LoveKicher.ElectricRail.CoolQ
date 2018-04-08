@@ -1,5 +1,7 @@
 ﻿using LoveKicher.ElectricRail.CoolQ.Constants;
 using LoveKicher.ElectricRail.CoolQ.Events;
+using LoveKicher.ElectricRail.CoolQ.Extensions;
+using LoveKicher.ElectricRail.CoolQ.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,12 +18,14 @@ namespace LoveKicher.ElectricRail.CoolQ
     {
         internal const int ApiVersion = 9;
 
-        public virtual string AppId { get; set; } = 
+        public virtual string AppId { get; } = 
             typeof(CoolQPlugin).Assembly.GetName().Name;
+        
 
 
 
         #region Events
+
         /// <summary>当酷Q启动时发生，该事件会被酷Q主线程处理。</summary>
         public event EventHandler Startup;
         /// <summary>当酷Q退出时发生，该事件会被酷Q主线程处理。</summary>
@@ -39,6 +43,9 @@ namespace LoveKicher.ElectricRail.CoolQ
         public event EventHandler<GroupMessageReceivedEventArgs> GroupMessageReceived;
         /// <summary>当收到讨论组消息时发生</summary>
         public event EventHandler<DiscussMessageReceivedEventArgs> DiscussMessageReceived;
+        /// <summary>当群内上传文件时发生</summary>
+        public event EventHandler<GroupFileUploadEventArgs> GroupFileUpload;
+        
         
         #endregion
 
@@ -102,50 +109,60 @@ namespace LoveKicher.ElectricRail.CoolQ
             }
 
 
-            var eventArgs = new PrivateMessageReceivedEventArgs(
+            var e = new PrivateMessageReceivedEventArgs(
                 type, msgId, fromQQ, msg, font);
 
             try
             {
-                PrivateMessageReceived?.Invoke(this, eventArgs);
+                PrivateMessageReceived?.Invoke(this, e);
             }
             catch (MessageInterceptedException)
             {
-                Debug.Assert(eventArgs.ReturnValue == 1);
+                Debug.Assert(e.ReturnValue == 1);
             }
-            return eventArgs.ReturnValue;
+            return e.ReturnValue;
         }
-
         internal int OnGroupMessageReceived(int subType, int msgId, long fromGroup, long fromQQ, string fromAnonymous, string msg, int font)
         {
             //subType恒为1
-            var eventArgs = new GroupMessageReceivedEventArgs(
+            var e = new GroupMessageReceivedEventArgs(
                 msgId, fromGroup, fromQQ, fromAnonymous, msg, font);
             try
             {
-                GroupMessageReceived?.Invoke(this, eventArgs);
+                GroupMessageReceived?.Invoke(this, e);
             }
             catch (MessageInterceptedException)
             {
-                Debug.Assert(eventArgs.ReturnValue == 1);
+                Debug.Assert(e.ReturnValue == 1);
             }
-            return eventArgs.ReturnValue;
+            return e.ReturnValue;
         }
 
         internal int OnDiscussMessageReceived(int subType, int msgId, long fromDiscuss, long fromQQ, string msg, int font)
         {
             //subType恒为1
-            var eventArgs = new DiscussMessageReceivedEventArgs(
+            var e = new DiscussMessageReceivedEventArgs(
                 msgId, fromDiscuss, fromQQ, msg, font);
             try
             {
-                DiscussMessageReceived?.Invoke(this, eventArgs);
+                DiscussMessageReceived?.Invoke(this, e);
             }
             catch (MessageInterceptedException)
             {
-                Debug.Assert(eventArgs.ReturnValue == 1);
+                Debug.Assert(e.ReturnValue == 1);
             }
-            return eventArgs.ReturnValue;
+            return e.ReturnValue;
+        }
+
+        internal void OnGroupUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        {
+            //subType恒为1
+            PluginContext.Current.Log(Logging.LogLevel.Debug, "获得群文件上传信息： " + file);
+            var e = new GroupFileUploadEventArgs(
+                sendTime.ToDateTime(), fromGroup, fromQQ, new GroupFileInfo(file));
+            
+            GroupFileUpload?.Invoke(this, e);
+            
         }
 
         #endregion

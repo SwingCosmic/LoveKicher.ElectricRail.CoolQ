@@ -26,17 +26,15 @@ namespace LoveKicher.ElectricRail.CoolQ.Extensions
 
         public byte[] GetBin(int len)
         {
-            bool flag = len <= 0;
             byte[] result;
-            if (flag)
+            if (len <= 0)
             {
                 result = null;
             }
             else
             {
-                byte[] array = _source.SubArray(_location, len);
+                result = _source.SubArray(_location, len);
                 _location += len;
-                result = array;
             }
             return result;
         }

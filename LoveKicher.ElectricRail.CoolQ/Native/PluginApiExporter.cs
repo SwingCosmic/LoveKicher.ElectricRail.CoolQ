@@ -91,8 +91,14 @@ namespace LoveKicher.ElectricRail.CoolQ.Native
                 subType, msgId, fromDiscuss, fromQQ, msg, font) ?? 0;
         }
 
+        [DllExport("_eventGroupUpload", CallingConvention = CallingConvention.StdCall)]
+        public static int _eventGroupUpload(int subType, int sendTime, long fromGroup, long fromQQ, string file)
+        {
+            PluginContext.Current.CurrentPlugin?.OnGroupUpload(
+                subType, sendTime, fromGroup, fromQQ, file);
+            return 0;
+        }
+            #endregion
 
-        #endregion
-
-    }
+        }
 }
