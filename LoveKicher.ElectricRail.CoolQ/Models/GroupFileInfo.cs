@@ -11,7 +11,6 @@ namespace LoveKicher.ElectricRail.CoolQ.Models
     /// <summary>
     /// 表示群文件上传的信息
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
     public class GroupFileInfo : CoolQModelBase
     {
         public GroupFileInfo(string base64String) : base(base64String)
