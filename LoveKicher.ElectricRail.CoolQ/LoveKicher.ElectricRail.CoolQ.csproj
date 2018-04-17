@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\LoveKicher.ElectricRail.CoolQ.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,7 +84,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\CoolQCode.cs" />
     <Compile Include="Constants\CoolQLogLevel.cs" />
+    <Compile Include="Constants\ContactShareType.cs" />
+    <Compile Include="Constants\MusicShareType.cs" />
     <Compile Include="Constants\PrivateMessageType.cs" />
     <Compile Include="CoolQApi.cs" />
     <Compile Include="CoolQPlugin.cs" />

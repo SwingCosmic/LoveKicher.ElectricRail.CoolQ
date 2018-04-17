@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 
 namespace LoveKicher.ElectricRail.CoolQ
 {
-    
+    /// <summary>
+    /// 表示酷Q插件
+    /// </summary>
     public class CoolQPlugin
     {
         internal const int ApiVersion = 9;
@@ -34,7 +36,7 @@ namespace LoveKicher.ElectricRail.CoolQ
         public event EventHandler PluginEnable;
         /// <summary>当应用被停用前发生</summary>
         public event EventHandler PluginDisable;
-        /// <summary>当插件初始化时发生，此时会下发AuthCode。</summary>
+        // / <summary>当插件初始化时发生，此时会下发AuthCode。</summary>
         //public event EventHandler<InitializeEventArgs> Initialize;
 
         /// <summary>当收到私聊消息时发生</summary>

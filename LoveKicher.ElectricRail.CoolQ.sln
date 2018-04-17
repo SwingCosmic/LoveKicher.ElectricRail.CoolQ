@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoveKicher.ElectricRail.CoolQ", "LoveKicher.ElectricRail.CoolQ\LoveKicher.ElectricRail.CoolQ.csproj", "{0CCE62F9-38BB-4C54-B082-98CA7B79A53B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginDemo", "PluginDemo\PluginDemo.csproj", "{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{0CCE62F9-38BB-4C54-B082-98CA7B79A53B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0CCE62F9-38BB-4C54-B082-98CA7B79A53B}.Release|x86.ActiveCfg = Release|x86
 		{0CCE62F9-38BB-4C54-B082-98CA7B79A53B}.Release|x86.Build.0 = Release|x86
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Debug|x86.Build.0 = Debug|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Release|x86.ActiveCfg = Release|Any CPU
+		{112E028B-88B3-4B2E-93EC-92D9DA04FFBA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -30,10 +30,13 @@ namespace LoveKicher.ElectricRail.CoolQ
         long GetLoginQQ();
         string GetRecord(string file, string outformat);
         string GetStrangerInfo(long QQID, bool 不使用缓存);
+        /// <summary>发送讨论组消息</summary>
         int SendDiscussMsg(long 讨论组号, string msg);
+        /// <summary>发送群聊消息</summary>
         int SendGroupMsg(long 群号, string msg);
         int SendLike(long QQID);
         int SendLikeV2(long QQID, int times);
+        /// <summary>发送私聊消息</summary>
         int SendPrivateMsg(long QQID, string msg);
         int SetDiscussLeave(long 讨论组号);
         int SetFatal(string 错误信息);

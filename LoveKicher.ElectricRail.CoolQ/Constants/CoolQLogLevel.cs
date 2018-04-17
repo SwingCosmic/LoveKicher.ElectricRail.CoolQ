@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LoveKicher.ElectricRail.CoolQ.Constants
 {
+    /// <summary>
+    /// 酷Q日志优先级
+    /// </summary>
     public enum CoolQLogLevel
     {
         Debug = 0,
