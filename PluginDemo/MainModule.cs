@@ -11,7 +11,7 @@ namespace PluginDemo
 {
     //标记模块导出
     [Export(typeof(ICoolQModule))]
-    public class MainModule
+    public class MainModule:ICoolQModule
     {
 
         // 在构造函数中绑定事件处理程序
@@ -19,6 +19,14 @@ namespace PluginDemo
         {
             PluginContext.Current.CurrentPlugin.PrivateMessageReceived += CurrentPlugin_PrivateMessageReceived;
         }
+
+        public string ModuleName => "Demo";
+
+        public string Description => "样例模块";
+
+        public string Author => "LoveKicher";
+
+        public string Version => "1.0";
 
         private void CurrentPlugin_PrivateMessageReceived(object sender, LoveKicher.ElectricRail.CoolQ.Events.PrivateMessageReceivedEventArgs e)
         {
